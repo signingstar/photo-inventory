@@ -1,29 +1,28 @@
 let multer = require("multer");
-let debug = require("debug")("photo-inventory");
+let debug = require("debug")("Modules:photo-inventory");
+let _ = require("underscore");
 
-const controller = function({modules}) {
+const photoInventoryController = ({modules}) => {
   let {pug, logger, jsAsset, cssAsset} = modules;
   debug(`photoInventoryController controller`);
-  var upload = multer({dest: './uploads/'}).any();
+  var upload = multer({dest: './uploads/'}).fields([{name:'photo', maxCount:1}]);
 
   return {
-    main: function({attributes, responders, page}) {
+    main: ({attributes, responders, page}) => {
       let {req, res} = attributes;
 
-      upload(req, res, function (err) {
-         if (err) {
-           console.log(err);
+      upload(req, res, err => {
+       if (err) {
+        console.log(err);
+      }
+      let {category, size} = _.pick(req.body, (value, key)=> {
+        return key === 'category' || key === 'size';
+      });
 
-           res.end('something wrong');
-         }
-         console.log(req.body);
-         console.log(req.files);
-
-         res.end('all is well');
-         // Everything went fine
-       });
+      res.status(200).json({successUrl: '/checkout?orderid=abc123'});
+     });
     }
   }
 }
 
-export default controller;
+module.exports = photoInventoryController;

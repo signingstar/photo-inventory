@@ -2,7 +2,7 @@
   "name": "photo-inventory",
   "version": "1.0.0",
   "description": "",
-  "main": "./lib/bundle.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,7 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "debug": "^2.2.0",
-    "multer": "^1.2.0"
+    "multer": "^1.2.0",
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "babel-core": "^6.14.0",
@@ -20,6 +21,7 @@
     "extract-text-webpack-plugin": "^1.0.1",
     "fs": "0.0.1-security",
     "path": "^0.12.7",
+    "source-map-support": "^0.4.2",
     "webpack": "^1.13.2"
   }
 }

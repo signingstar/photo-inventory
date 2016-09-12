@@ -48,11 +48,14 @@ module.exports =  {
   // Use the plugin to specify the resulting filename (and add needed behavior to the compiler)
   plugins: [
       new ExtractTextPlugin("[name].js"),
+      new webpack.BannerPlugin('require("source-map-support").install();',
+        { raw: true, entryOnly: false }),
   ],
 
   resolve: {
       extensions: ["", ".webpack.js", ".web.js", ".jsx", ".js", "css", "scss"]
   },
 
+  devtool: 'source-map',
   externals: nodeModules
 };
