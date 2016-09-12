@@ -1,26 +1,27 @@
-import multer from "multer";
+let multer = require("multer");
+let debug = require("debug")("photo-inventory");
 
-const controller = function({modules}) {
+module.exports = controller = function({modules}) {
   let {pug, logger, jsAsset, cssAsset} = modules;
+  debug(`photoInventoryController controller`);
+  var upload = multer({dest: './uploads/'}).any();
 
   return {
     main: function({attributes, responders, page}) {
       let {req, res} = attributes;
 
-      console.log(req.body);
-      console.log(req.files);
+      upload(req, res, function (err) {
+         if (err) {
+           console.log(err);
 
-      let config =  {
-        dest: './uploads/',
-        rename: function(fieldname, filename) {
-          console.log(`fieldname:${fieldname} | filename:${filename}`);
-          return filename.replace(/\W+/g, '-').toLowerCase() + Date.now();
-        }
-      }
+           res.end('something wrong');
+         }
+         console.log(req.body);
+         console.log(req.files);
 
-      return multer(config).any();
+         res.end('all is well');
+         // Everything went fine
+       });
     }
   }
 }
-
-export default controller;
