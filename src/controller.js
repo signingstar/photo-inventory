@@ -1,7 +1,7 @@
 let multer = require("multer");
 let debug = require("debug")("photo-inventory");
 
-module.exports = controller = function({modules}) {
+const controller = function({modules}) {
   let {pug, logger, jsAsset, cssAsset} = modules;
   debug(`photoInventoryController controller`);
   var upload = multer({dest: './uploads/'}).any();
@@ -25,3 +25,5 @@ module.exports = controller = function({modules}) {
     }
   }
 }
+
+export default controller;
