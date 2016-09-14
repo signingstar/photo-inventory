@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel -d ./lib ./src"
   },
   "private": true,
   "author": "",
@@ -15,6 +16,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
+    "babel-cli": "^6.14.0",
     "babel-core": "^6.14.0",
     "babel-loader": "^6.2.5",
     "babel-preset-es2015": "^6.14.0",

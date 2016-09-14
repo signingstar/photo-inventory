@@ -1,8 +1,8 @@
-let multer = require("multer");
+import multer from "multer";
 let debug = require("debug")("Modules:photo-inventory");
-let _ = require("underscore");
+import { pick } from "underscore";
 
-const photoInventoryController = ({modules}) => {
+const controller = ({modules}) => {
   let {pug, logger, jsAsset, cssAsset} = modules;
   debug(`photoInventoryController controller`);
   var upload = multer({dest: './uploads/'}).fields([{name:'photo', maxCount:1}]);
@@ -15,7 +15,7 @@ const photoInventoryController = ({modules}) => {
        if (err) {
         console.log(err);
       }
-      let {category, size} = _.pick(req.body, (value, key)=> {
+      let {category, size} = pick(req.body, (value, key)=> {
         return key === 'category' || key === 'size';
       });
 
@@ -25,4 +25,4 @@ const photoInventoryController = ({modules}) => {
   }
 }
 
-module.exports = photoInventoryController;
+export default controller;
