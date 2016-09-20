@@ -3,23 +3,25 @@ let debug = require("debug")("Modules:photo-inventory");
 import { pick } from "underscore";
 
 const controller = ({modules}) => {
-  let {pug, logger, jsAsset, cssAsset} = modules;
+  const {logger, queryDb} = modules;
   debug(`photoInventoryController controller`);
-  var upload = multer({dest: './uploads/'}).fields([{name:'photo', maxCount:1}]);
+  const upload = multer({dest: './uploads/'}).fields([{name:'photo', maxCount:1}]);
 
   return {
     main: ({attributes, responders, page}) => {
-      let {req, res} = attributes;
+      const {req, res} = attributes;
 
-      upload(req, res, err => {
-       if (err) {
-        console.log(err);
-      }
-      let {category, size} = pick(req.body, (value, key)=> {
-        return key === 'category' || key === 'size';
-      });
+      upload(req, res, (err) => {
+        if (err) {
+          logger.error(err);
+          res.status(500).end();
+        }
 
-      res.status(200).json({successUrl: '/checkout?orderid=abc123'});
+        let {category, size} = pick(req.body, (value, key)=> {
+          return key === 'category' || key === 'size';
+        });
+
+        res.status(302).json({successUrl: '/checkout?orderid=abc123'});
      });
     }
   }
