@@ -22,7 +22,8 @@ const fetchFileInfo = (file) => {
   const fileMetaData = {
     id: uuid.v4().replace(/\-/g, ''),
     originalname: file.originalname,
-    path: file.path
+    destination: file.destination,
+    filename: file.filename
   }
 
   return fileMetaData
@@ -33,20 +34,6 @@ const getRandomInt = (min, max) => {
   max = Math.floor(max)
 
   return Math.floor(Math.random() * (max - min)) + min
-}
-
-const getFileExtension = (fileName) => {
-  let nameParts = fileName.split('.')
-
-  if(nameParts.length >=2) {
-    let probableExtension = nameParts[nameParts.length-1]
-
-    if(probableExtension !== '') {
-      return probableExtension
-    }
-  }
-
-  return 'jpg'
 }
 
 const controller = ({modules}) => {
@@ -65,9 +52,8 @@ const controller = ({modules}) => {
 
   const filename = (req, file, cb) => {
     const { fieldname, originalname } = file
-    const ext = getFileExtension(originalname)
 
-    cb(null, `${fieldname}-${Date.now()}.${ext}`)
+    cb(null, `${fieldname}-${Date.now()}`)
   }
 
   const storage = multer.diskStorage({
