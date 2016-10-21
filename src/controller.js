@@ -18,15 +18,17 @@ const fileFilter = (req, file, cb) => {
   cb("Error: File upload only supports the following filetypes - " + filetypes);
 }
 
-const fetchFileInfo = (file) => {
-  const fileMetaData = {
-    id: uuid.v4().replace(/\-/g, ''),
-    originalname: file.originalname,
-    destination: file.destination,
-    filename: file.filename
-  }
+const fetchFileInfo = (file, album_id) => {
+  const {originalname, destination, filename, size, fieldname} = file
 
-  return fileMetaData
+  return {
+    id: uuid.v4().replace(/\-/g, ''),
+    originalname,
+    destination,
+    filename,
+    size,
+    album_id
+  }
 }
 
 const getRandomInt = (min, max) => {
@@ -69,7 +71,7 @@ const controller = ({modules}) => {
       const { session } = req
 
       upload(req, res, (err) => {
-        const orderId = req.body.order_id
+        const { order_id, album_id } = req.body
 
         if (err) {
           logger.error(err);
@@ -78,11 +80,11 @@ const controller = ({modules}) => {
 
         const images = req.files['images'] || []
         images.map(image => {
-          const fileInfo = fetchFileInfo(image)
+          const fileInfo = fetchFileInfo(image, album_id)
           let score = parseInt(fileInfo.originalname.replace(/[^\d]/g, ''))
           score = isNaN(score) ? getRandomInt(0, 1000) : score
 
-          redisClient.zadd([`order_id_${orderId}:files`, score, JSON.stringify(fileInfo)])
+          redisClient.zadd([`order_id_${order_id}:files`, score, JSON.stringify(fileInfo)])
         })
 
 
